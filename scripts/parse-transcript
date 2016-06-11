@@ -1,0 +1,35 @@
+#!/bin/bash
+# Parses a transcript of an interview
+
+trumpId="TRUMP:"  # Identifier for trump interventions
+input="$1"
+
+echo "["
+
+awk '!/^$/ && $1 ~ /[A-Z]+:/ {print}' $1 | \
+	gawk -F ': ' '
+	$1 != "TRUMP" { question = $2 }
+	$1 == "TRUMP" {
+		gsub(/’/, "\047", $2)  # Weird hack to put an apostrophe
+		gsub(/“/, "\047", $2)
+		gsub(/”/, "\047", $2)
+		$2 = gensub(/\.([^ ])/, "\\1", "g", $2)
+
+		phraseCount = split($2, phrases, ".")
+
+		for (i = 1; i <= phraseCount; i++) {
+			phrase = phrases[i]
+			gsub(/^ /, "", phrase)
+
+			if (length(phrase) == 0)
+				continue
+
+			print "{ "
+			print "\t\"question\": \"" question "\","
+			print "\t\"answer\": \"" phrase "\"\n}, "
+		}
+	}
+'
+
+echo "]"
+
