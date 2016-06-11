@@ -1,0 +1,3 @@
+[submodule "modules/hideit-bot"]
+	path = modules/hideit-bot
+	url = git@github.com:erpheus/hideit-bot.git
