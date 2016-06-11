@@ -16,6 +16,7 @@ awk '!/^$/ && $1 ~ /[A-Z]+:/ {print}' $1 | \
 		$2 = gensub(/\.([^ ])/, "\\1", "g", $2)
 
 		phraseCount = split($2, phrases, ".")
+		previous = ""
 
 		for (i = 1; i <= phraseCount; i++) {
 			phrase = phrases[i]
@@ -25,8 +26,15 @@ awk '!/^$/ && $1 ~ /[A-Z]+:/ {print}' $1 | \
 				continue
 
 			print "{ "
-			print "\t\"question\": \"" question "\","
+
+			if (length(previous) > 0)
+				print "\t\"question\": \"" previous "\","
+			else
+				print "\t\"question\": \"" question "\","
+
 			print "\t\"answer\": \"" phrase "\"\n}, "
+
+			previous = phrase
 		}
 	}
 '
