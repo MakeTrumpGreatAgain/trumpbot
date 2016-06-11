@@ -1,4 +1,3 @@
-from sknn.mlp import Classifier, Layer
 import sys
 import json
 import requests
@@ -15,7 +14,7 @@ def get_important_words(sentence):
     sleep(0.2)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(("192.168.99.100", 8800))
-    s.send("\n\n" + entry["answer"] + "\n")
+    s.send("\n\n" + sentence + "\n")
     data = s.recv(2048)
     s.close()
 
