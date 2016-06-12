@@ -60,7 +60,7 @@ module Drumpf_bot
             return nil
           end
 
-          uri = URI('https://localhost:5000')
+          uri = URI('http://trumpspeak')
           req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
           req.body = {sentence: sentence}.to_json
           res = Net::HTTP.start(uri.hostname, uri.port) do |http|

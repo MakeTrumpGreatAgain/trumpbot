@@ -4,6 +4,7 @@
 
 # Create a pipe to "loop" the input, so the final print can be brought back to the
 # client with netcat
+rm -f pipe
 mkfifo pipe
 
 # Configuration for the syntaxnet program

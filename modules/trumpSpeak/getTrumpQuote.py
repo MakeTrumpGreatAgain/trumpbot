@@ -5,7 +5,6 @@ from numpy import exp, dot, zeros, outer, random, dtype, get_include, float32 as
      uint32, seterr, array, uint8, vstack, argsort, fromstring, sqrt, newaxis, ndarray, empty, sum as np_sum
 import json
 from numpy import random,argsort,sqrt
-from pylab import plot,show
 
 from flask import Flask, request
 app = Flask(__name__)
@@ -16,7 +15,7 @@ from time import sleep
 import string
 
 
-json_data = open('../../json/vectorized.json').read()
+json_data = open('/data/vectorized.json').read()
 
 data = json.loads(json_data)
 
@@ -25,7 +24,7 @@ all_vectors = array(map(lambda pair: np.frombuffer(base64.decodestring(pair[u'qu
 def getVectorForWord(word):
 	word = word.encode('ascii').lower()
 	word = word.translate(string.maketrans("",""), string.punctuation)
-	vector_string = urllib2.urlopen("http://192.168.99.101:8803/word2vec/model?word="+word).read()
+	vector_string = urllib2.urlopen("http://word2vec/word2vec/model?word="+word).read()
 	if vector_string == "null":
 		return None
 	vector_string = vector_string[1:-1]
@@ -62,7 +61,7 @@ def get_important_words(sentence):
     sentence = sentence.encode('ascii', 'ignore') +'.'
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("192.168.99.101", 8800))
+    s.connect(("wordselector", 80))
     s.send("\n\n" + sentence + "\n")
     data = s.recv(2048)
     s.close()
@@ -80,4 +79,7 @@ def hello_world():
 	print target_v
 	index = knn_search(target_v, all_vectors, 1)[0]
 	return data[index][u'answer'] + '\n\n'
+
+
+app.run(host="0.0.0.0", port=80)
 

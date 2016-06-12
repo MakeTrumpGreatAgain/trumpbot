@@ -1,0 +1,27 @@
+version: '2'
+services:
+  word2vec:
+    build: modules/word2vec
+    expose:
+      - 80
+
+  wordselector:
+    build: modules/word-selector
+    expose:
+      - 80
+
+  trumpspeak:
+    build: modules/trumpSpeak
+    links:
+      - word2vec
+      - wordselector
+    expose:
+      - 80
+    volumes:
+      - "./json:/data"
+  bot:
+    build: modules/bot
+    links:
+      - trumpspeak
+    dns: 8.8.8.8
+    env_file: modules/bot/tokens.env
