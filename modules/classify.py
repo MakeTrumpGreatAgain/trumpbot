@@ -8,12 +8,13 @@ responses = {}
 
 
 def get_important_words(sentence):
+    sentence = sentence.encode('ascii', 'ignore') +'.'
     if sentence in responses:
         return responses[sentence]
 
     sleep(0.2)
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("192.168.99.100", 8800))
+    s.connect(("192.168.99.101", 8800))
     s.send("\n\n" + sentence + "\n")
     data = s.recv(2048)
     s.close()
@@ -37,10 +38,10 @@ new_entries = []
 for entry in contents:
     valid = True
 
-    entry["important_answer"] = get_important_words(entry["answer"])
+    #entry["important_answer"] = get_important_words(entry["answer"])
 
-    if len(entry["important_answer"]) == 0:
-        valid = False
+    #if len(entry["important_answer"]) == 0:
+    #    valid = False
 
     entry["important_question"] = get_important_words(entry["question"])
 
@@ -52,4 +53,4 @@ for entry in contents:
 
     sleep(0.5)
 
-json.dumps(new_entries)
+print (json.dumps(new_entries))
